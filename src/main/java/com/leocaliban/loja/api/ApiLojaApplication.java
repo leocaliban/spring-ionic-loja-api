@@ -8,13 +8,18 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.leocaliban.loja.api.domain.Categoria;
+import com.leocaliban.loja.api.domain.Produto;
 import com.leocaliban.loja.api.repositories.CategoriaRepository;
+import com.leocaliban.loja.api.repositories.ProdutoRepository;
 
 @SpringBootApplication
 public class ApiLojaApplication implements CommandLineRunner {
 	
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
+	private ProdutoRepository produtoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiLojaApplication.class, args);
@@ -25,7 +30,23 @@ public class ApiLojaApplication implements CommandLineRunner {
 		Categoria categoria1 = new Categoria(null, "Informática");
 		Categoria categoria2 = new Categoria(null, "Cozinha");
 		
+		Produto produto1 = new Produto(null, "Roteador", 100.00);
+		Produto produto2 = new Produto(null, "Monitor", 900.00);
+		Produto produto3 = new Produto(null, "Liquidificador", 70.00);
+		Produto produto4 = new Produto(null, "Panela Elétrica", 300.00);
+		
+		categoria1.getProdutos().addAll(Arrays.asList(produto1, produto2));
+		categoria2.getProdutos().addAll(Arrays.asList(produto3, produto4));
+		
+		produto1.getCategorias().addAll(Arrays.asList(categoria1));
+		produto2.getCategorias().addAll(Arrays.asList(categoria1));
+		produto3.getCategorias().addAll(Arrays.asList(categoria2));
+		produto4.getCategorias().addAll(Arrays.asList(categoria2));
+		
 		categoriaRepository.saveAll(Arrays.asList(categoria1, categoria2));
+		
+		produtoRepository.saveAll(Arrays.asList(produto1, produto2, produto3, produto4));
+		
 		
 	}
 }
