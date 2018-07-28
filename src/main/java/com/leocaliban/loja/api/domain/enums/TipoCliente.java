@@ -1,5 +1,13 @@
 package com.leocaliban.loja.api.domain.enums;
 
+/**
+ * Enum que representa um tipo de cliente, 
+ * implementação feita de modo que se mantém o controle dos tipos através do código colocado manualmente em cada um,
+ * permitindo salvar o código em int no banco e ao recuperar, converter para o tipo String para visualização do mesmo.
+ * @author Leocaliban
+ *
+ * 28 de jul de 2018
+ */
 public enum TipoCliente {
 	
 	PESSOA_FISICA(1, "Pessoa Física"), 
