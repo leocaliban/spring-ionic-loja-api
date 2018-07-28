@@ -10,6 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.leocaliban.loja.api.domain.enums.StatusPagamento;
 
 @Entity
@@ -23,6 +24,7 @@ public abstract class Pagamento implements Serializable{
 	
 	private Integer status;
 	
+	@JsonBackReference
 	@OneToOne
 	@JoinColumn(name = "pedido_id")
 	@MapsId // usado para garantir que o id do pedido seja o mesmo do pagamento, substitui GeneratedValue.
