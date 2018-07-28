@@ -13,6 +13,7 @@ import com.leocaliban.loja.api.domain.Cidade;
 import com.leocaliban.loja.api.domain.Cliente;
 import com.leocaliban.loja.api.domain.Endereco;
 import com.leocaliban.loja.api.domain.Estado;
+import com.leocaliban.loja.api.domain.ItemPedido;
 import com.leocaliban.loja.api.domain.Pagamento;
 import com.leocaliban.loja.api.domain.PagamentoBoleto;
 import com.leocaliban.loja.api.domain.PagamentoCartao;
@@ -25,6 +26,7 @@ import com.leocaliban.loja.api.repositories.CidadeRepository;
 import com.leocaliban.loja.api.repositories.ClienteRepository;
 import com.leocaliban.loja.api.repositories.EnderecoRepository;
 import com.leocaliban.loja.api.repositories.EstadoRepository;
+import com.leocaliban.loja.api.repositories.ItemPedidoRepository;
 import com.leocaliban.loja.api.repositories.PagamentoRepository;
 import com.leocaliban.loja.api.repositories.PedidoRepository;
 import com.leocaliban.loja.api.repositories.ProdutoRepository;
@@ -55,6 +57,9 @@ public class ApiLojaApplication implements CommandLineRunner {
 	
 	@Autowired
 	private PagamentoRepository pagamentoRepository;
+	
+	@Autowired
+	private ItemPedidoRepository itemPedidoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(ApiLojaApplication.class, args);
@@ -125,5 +130,19 @@ public class ApiLojaApplication implements CommandLineRunner {
 		
 		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
 		pagamentoRepository.saveAll(Arrays.asList(pagamento1, pagamento2));
+		
+		ItemPedido item1 = new ItemPedido(pedido1, produto1, 0.0, 1, 100.0);
+		ItemPedido item2 = new ItemPedido(pedido1, produto3, 0.0, 2, 140.0);
+		ItemPedido item3 = new ItemPedido(pedido2, produto2, 100.0, 1, 800.0);
+		
+		pedido1.getItens().addAll(Arrays.asList(item1, item2));
+		pedido2.getItens().addAll(Arrays.asList(item3));
+		
+		produto1.getItens().addAll(Arrays.asList(item1));
+		produto2.getItens().addAll(Arrays.asList(item3));
+		produto3.getItens().addAll(Arrays.asList(item2));
+		
+		itemPedidoRepository.saveAll(Arrays.asList(item1, item2, item3));
+		
 	}
 }
