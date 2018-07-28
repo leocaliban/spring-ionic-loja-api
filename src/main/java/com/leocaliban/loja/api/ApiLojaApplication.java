@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.leocaliban.loja.api.domain.Categoria;
 import com.leocaliban.loja.api.domain.Cidade;
+import com.leocaliban.loja.api.domain.Cliente;
+import com.leocaliban.loja.api.domain.Endereco;
 import com.leocaliban.loja.api.domain.Estado;
 import com.leocaliban.loja.api.domain.Produto;
+import com.leocaliban.loja.api.domain.enums.TipoCliente;
 import com.leocaliban.loja.api.repositories.CategoriaRepository;
 import com.leocaliban.loja.api.repositories.CidadeRepository;
+import com.leocaliban.loja.api.repositories.ClienteRepository;
+import com.leocaliban.loja.api.repositories.EnderecoRepository;
 import com.leocaliban.loja.api.repositories.EstadoRepository;
 import com.leocaliban.loja.api.repositories.ProdutoRepository;
 
@@ -30,6 +35,12 @@ public class ApiLojaApplication implements CommandLineRunner {
 	
 	@Autowired
 	private CidadeRepository cidadeRepository;
+	
+	@Autowired
+	private ClienteRepository clienteRepository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(ApiLojaApplication.class, args);
@@ -72,6 +83,18 @@ public class ApiLojaApplication implements CommandLineRunner {
 		
 		estadoRepository.saveAll(Arrays.asList(estado1, estado2, estado3));
 		cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3, cidade4, cidade5));
+		
+		Cliente cliente1 = new Cliente(null, "Jack Bauer", "uct@gmail.com", "09565698785", TipoCliente.PESSOA_FISICA);
+		
+		cliente1.getTelefones().addAll(Arrays.asList("99165-7855", "98878-8577"));
+		
+		Endereco endereco1 = new Endereco(null, "New Link", "071", "Apartamento", "Centro", "54585400", cliente1, cidade2);
+		Endereco endereco2 = new Endereco(null, "Rua Nova", "200", "Casa", "Centro", "54585400", cliente1, cidade1);
+		
+		cliente1.getEnderecos().addAll(Arrays.asList(endereco1, endereco2));
+		
+		clienteRepository.saveAll(Arrays.asList(cliente1));
+		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
 		
 		
 	}
