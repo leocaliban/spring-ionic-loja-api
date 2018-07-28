@@ -3,6 +3,8 @@ package com.leocaliban.loja.api.domain;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import com.leocaliban.loja.api.domain.enums.StatusPagamento;
 
@@ -11,7 +13,10 @@ public class PagamentoBoleto extends Pagamento {
 
 	private static final long serialVersionUID = 1L;
 	
+	@Temporal(TemporalType.DATE)
 	private Date dataVencimento;
+	
+	@Temporal(TemporalType.DATE)
 	private Date dataPagamento;
 	
 	public PagamentoBoleto() {
