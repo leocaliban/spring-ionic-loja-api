@@ -1,5 +1,6 @@
 package com.leocaliban.loja.api;
 
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,13 +13,20 @@ import com.leocaliban.loja.api.domain.Cidade;
 import com.leocaliban.loja.api.domain.Cliente;
 import com.leocaliban.loja.api.domain.Endereco;
 import com.leocaliban.loja.api.domain.Estado;
+import com.leocaliban.loja.api.domain.Pagamento;
+import com.leocaliban.loja.api.domain.PagamentoBoleto;
+import com.leocaliban.loja.api.domain.PagamentoCartao;
+import com.leocaliban.loja.api.domain.Pedido;
 import com.leocaliban.loja.api.domain.Produto;
+import com.leocaliban.loja.api.domain.enums.StatusPagamento;
 import com.leocaliban.loja.api.domain.enums.TipoCliente;
 import com.leocaliban.loja.api.repositories.CategoriaRepository;
 import com.leocaliban.loja.api.repositories.CidadeRepository;
 import com.leocaliban.loja.api.repositories.ClienteRepository;
 import com.leocaliban.loja.api.repositories.EnderecoRepository;
 import com.leocaliban.loja.api.repositories.EstadoRepository;
+import com.leocaliban.loja.api.repositories.PagamentoRepository;
+import com.leocaliban.loja.api.repositories.PedidoRepository;
 import com.leocaliban.loja.api.repositories.ProdutoRepository;
 
 @SpringBootApplication
@@ -41,7 +49,13 @@ public class ApiLojaApplication implements CommandLineRunner {
 	
 	@Autowired
 	private EnderecoRepository enderecoRepository;
-
+	
+	@Autowired
+	private PedidoRepository pedidoRepository;
+	
+	@Autowired
+	private PagamentoRepository pagamentoRepository;
+	
 	public static void main(String[] args) {
 		SpringApplication.run(ApiLojaApplication.class, args);
 	}
@@ -96,6 +110,20 @@ public class ApiLojaApplication implements CommandLineRunner {
 		clienteRepository.saveAll(Arrays.asList(cliente1));
 		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
 		
+		SimpleDateFormat formataData = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		
+		Pedido pedido1 = new Pedido(null, formataData.parse("28/07/2017 08:30"), cliente1, endereco1);
+		Pedido pedido2 = new Pedido(null, formataData.parse("30/07/2017 10:30"), cliente1, endereco2);
+		
+		Pagamento pagamento1 = new PagamentoCartao(null, StatusPagamento.QUITADO, pedido1, 10);
+		pedido1.setPagamento(pagamento1);
+		
+		Pagamento pagamento2 = new PagamentoBoleto(null, StatusPagamento.PENDENTE, pedido2, formataData.parse("20/10/2017 00:00"), null);
+		pedido2.setPagamento(pagamento2);
+		
+		cliente1.getPedidos().addAll(Arrays.asList(pedido1, pedido2));
+		
+		pedidoRepository.saveAll(Arrays.asList(pedido1, pedido2));
+		pagamentoRepository.saveAll(Arrays.asList(pagamento1, pagamento2));
 	}
 }

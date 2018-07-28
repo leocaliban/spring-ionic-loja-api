@@ -14,14 +14,14 @@ import com.leocaliban.loja.api.domain.enums.StatusPagamento;
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Pagamento implements Serializable{
+public abstract class Pagamento implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 	
 	@Id
 	private Integer id;
 	
-	private StatusPagamento status;
+	private Integer status;
 	
 	@OneToOne
 	@JoinColumn(name = "pedido_id")
@@ -35,7 +35,7 @@ public class Pagamento implements Serializable{
 	public Pagamento(Integer id, StatusPagamento status, Pedido pedido) {
 		super();
 		this.id = id;
-		this.status = status;
+		this.status = status.getCodigo();
 		this.pedido = pedido;
 	}
 
@@ -48,11 +48,11 @@ public class Pagamento implements Serializable{
 	}
 
 	public StatusPagamento getStatus() {
-		return status;
+		return StatusPagamento.toEnum(status);
 	}
 
 	public void setStatus(StatusPagamento status) {
-		this.status = status;
+		this.status = status.getCodigo();
 	}
 
 	public Pedido getPedido() {
