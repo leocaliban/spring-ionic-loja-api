@@ -1,5 +1,6 @@
 package com.leocaliban.loja.api.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,10 @@ public class CategoriaService {
 		return objeto.orElseThrow(() -> new ObjetoNaoEncontratoException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 	}
+	
+	public List<Categoria> buscarTodas() {
+		return repository.findAll();
+	}
 
 	public Categoria salvar(Categoria objeto) {
 		objeto.setId(null);
@@ -46,4 +51,5 @@ public class CategoriaService {
 		}
 		
 	}
+
 }
