@@ -53,9 +53,18 @@ public class CategoriaService {
 	}
 
 	public Categoria editar(Categoria objeto) {
-		//Na edição é preciso verificar se o objeto existe, verificando seu id.
-		buscarPorId(objeto.getId());
-		return repository.save(objeto);
+		Categoria novoObjeto = buscarPorId(objeto.getId());
+		aplicarEdicao(novoObjeto, objeto);
+		return repository.save(novoObjeto);
+	}
+
+	/**
+	 * Método auxiliar para aplicar as edições no objeto.
+	 * @param novoObjeto - objeto que será salvo contendo os dados complementares do objeto antigo.
+	 * @param objeto - objeto recuperado do banco que irá tranferir seus dados para o novo objeto.
+	 */
+	private void aplicarEdicao(Categoria novoObjeto, Categoria objeto) {
+		novoObjeto.setNome(objeto.getNome());
 	}
 
 	public void deletar(Integer id) {
