@@ -22,4 +22,9 @@ public class CategoriaService {
 		return objeto.orElseThrow(() -> new ObjetoNaoEncontratoException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Categoria.class.getName()));
 	}
+
+	public Categoria salvar(Categoria objeto) {
+		objeto.setId(null);
+		return repository.save(objeto);
+	}
 }
