@@ -60,7 +60,8 @@ public class Cliente implements Serializable{
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
-		this.tipoCliente = tipoCliente.getCodigo();
+		//condicional para evitar nullpointer no PUT
+		this.tipoCliente = (tipoCliente == null) ? null : tipoCliente.getCodigo();
 	}
 
 	public Integer getId() {
