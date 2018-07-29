@@ -11,6 +11,7 @@ import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 
 import com.leocaliban.loja.api.domain.Categoria;
+import com.leocaliban.loja.api.dto.CategoriaDTO;
 import com.leocaliban.loja.api.repositories.CategoriaRepository;
 import com.leocaliban.loja.api.services.exceptions.IntegridadeDeDadosException;
 import com.leocaliban.loja.api.services.exceptions.ObjetoNaoEncontratoException;
@@ -65,7 +66,10 @@ public class CategoriaService {
 		catch (DataIntegrityViolationException e) {
 			throw new IntegridadeDeDadosException("Não é possível excluir uma categoria que possui produtos.");
 		}
-		
+	}
+	
+	public Categoria converterDTO(CategoriaDTO objetoDTO) {
+		return new Categoria(objetoDTO.getId(), objetoDTO.getNome());
 	}
 
 }
