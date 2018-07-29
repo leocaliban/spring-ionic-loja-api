@@ -1,5 +1,6 @@
 package com.leocaliban.loja.api.resources;
 
+import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.leocaliban.loja.api.domain.Cliente;
 import com.leocaliban.loja.api.dto.ClienteDTO;
+import com.leocaliban.loja.api.dto.ClienteNovoDTO;
 import com.leocaliban.loja.api.services.ClienteService;
 
 @RestController
@@ -55,6 +58,14 @@ public class ClienteResource {
 		
 		Page<ClienteDTO> listaDTO = lista.map(elemento -> new ClienteDTO(elemento));
 		return ResponseEntity.ok().body(listaDTO);
+	}
+	
+	@RequestMapping(method = RequestMethod.POST)
+	public ResponseEntity<Void> salvar(@Valid @RequestBody ClienteNovoDTO objetoDTO){
+		Cliente objeto = service.converterDTO(objetoDTO);
+		objeto = service.salvar(objeto);
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(objeto.getId()).toUri();
+		return ResponseEntity.created(uri).build();
 	}
 	
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)

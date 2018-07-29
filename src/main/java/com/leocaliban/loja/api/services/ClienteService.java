@@ -9,10 +9,16 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.leocaliban.loja.api.domain.Cidade;
 import com.leocaliban.loja.api.domain.Cliente;
+import com.leocaliban.loja.api.domain.Endereco;
+import com.leocaliban.loja.api.domain.enums.TipoCliente;
 import com.leocaliban.loja.api.dto.ClienteDTO;
+import com.leocaliban.loja.api.dto.ClienteNovoDTO;
 import com.leocaliban.loja.api.repositories.ClienteRepository;
+import com.leocaliban.loja.api.repositories.EnderecoRepository;
 import com.leocaliban.loja.api.services.exceptions.IntegridadeDeDadosException;
 import com.leocaliban.loja.api.services.exceptions.ObjetoNaoEncontratoException;
 
@@ -21,6 +27,9 @@ public class ClienteService {
 
 	@Autowired
 	private ClienteRepository repository;
+	
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 	
 	public Cliente buscarPorId(Integer id) {
 		//OPTIONAL - Container que encapsula o objeto buscado, evitando excessao nullpointer [JAVA 8]
@@ -46,8 +55,15 @@ public class ClienteService {
 		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
 		return repository.findAll(pageRequest);
 	}
-
-	//TODO: Salvar
+	
+	//Ao salvar um cliente o endereço tem que ser salvo também, para garantir que tudo ocorra em uma única sessão usa o Transactional
+	@Transactional 
+	public Cliente salvar(Cliente objeto) {
+		objeto.setId(null);
+		objeto = repository.save(objeto);
+		enderecoRepository.saveAll(objeto.getEnderecos());
+		return objeto;
+	}
 
 	public Cliente editar(Cliente objeto) {
 		Cliente novoObjeto = buscarPorId(objeto.getId());
@@ -77,5 +93,25 @@ public class ClienteService {
 	
 	public Cliente converterDTO(ClienteDTO objetoDTO) {
 		return new Cliente(objetoDTO.getId(), objetoDTO.getNome(), objetoDTO.getEmail(), null, null);
+	}
+	
+	public Cliente converterDTO(ClienteNovoDTO objetoDTO) {
+		Cliente cliente = new Cliente(null, objetoDTO.getNome(), objetoDTO.getEmail(), 
+							objetoDTO.getCpfOuCnpj(), TipoCliente.toEnum(objetoDTO.getTipoCliente()));//tipo cliente convertido
+		
+		Cidade cidade = new Cidade(objetoDTO.getCidadeId(), null, null);
+		
+		Endereco endereco = new Endereco(null, objetoDTO.getLogradouro(), objetoDTO.getNumero(), 
+							objetoDTO.getComplemento(), objetoDTO.getBairro(), objetoDTO.getCep(), cliente, cidade);
+		cliente.getEnderecos().add(endereco);
+		cliente.getTelefones().add(objetoDTO.getTelefone1());
+		
+		if(objetoDTO.getTelefone2() != null) {
+			cliente.getTelefones().add(objetoDTO.getTelefone2());
+		}
+		if(objetoDTO.getTelefone3() != null) {
+			cliente.getTelefones().add(objetoDTO.getTelefone3());
+		}
+		return cliente;
 	}
 }
