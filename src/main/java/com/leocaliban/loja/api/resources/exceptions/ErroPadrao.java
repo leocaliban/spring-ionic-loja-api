@@ -3,7 +3,7 @@ package com.leocaliban.loja.api.resources.exceptions;
 import java.io.Serializable;
 
 /**
- * Classe auxiliar de erro padrão para encapsular os dados do erro.
+ * Classe auxiliar de erro padrão para encapsular os dados do erro de forma personalizada.
  * @author Leocaliban
  *
  * 27 de jul de 2018
