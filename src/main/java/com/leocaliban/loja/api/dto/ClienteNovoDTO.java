@@ -7,6 +7,9 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.leocaliban.loja.api.services.validators.ClienteInsert;
+
+@ClienteInsert
 public class ClienteNovoDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
