@@ -12,12 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerMapping;
 
 import com.leocaliban.loja.api.domain.Cliente;
-import com.leocaliban.loja.api.domain.enums.TipoCliente;
 import com.leocaliban.loja.api.dto.ClienteDTO;
-import com.leocaliban.loja.api.dto.ClienteNovoDTO;
 import com.leocaliban.loja.api.repositories.ClienteRepository;
 import com.leocaliban.loja.api.resources.exceptions.MensagemDoCampo;
-import com.leocaliban.loja.api.services.validators.utils.CPF_CNPJ;
 
 public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate, ClienteDTO> {
 	
