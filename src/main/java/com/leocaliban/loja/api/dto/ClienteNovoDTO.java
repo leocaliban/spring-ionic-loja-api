@@ -2,28 +2,42 @@ package com.leocaliban.loja.api.dto;
 
 import java.io.Serializable;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotEmpty;
+
+import org.hibernate.validator.constraints.Length;
+
 public class ClienteNovoDTO implements Serializable{
 
 	private static final long serialVersionUID = 1L;
 
+	@NotEmpty(message = "O preenchimento do nome é obrigatório.")
+	@Length(min = 5, max = 120, message = "O tamanho do nome deve ser entre 5 e 120 caracteres.")
 	private String nome;
-
+	
+	@NotEmpty(message = "O preenchimento do E-mail é obrigatório.")
+	@Email(message = "Este E-mail está inválido.")
 	private String email;
 
+	@NotEmpty(message = "O preenchimento do CPF ou CNPJ é obrigatório.")
 	private String cpfOuCnpj;
 
 	private Integer tipoCliente;
 	
+	@NotEmpty(message = "O preenchimento do logradouro é obrigatório.")
 	private String logradouro;
 	
+	@NotEmpty(message = "O preenchimento do número é obrigatório.")
 	private String numero;
 	
 	private String complemento;
 	
 	private String bairro;
 	
+	@NotEmpty(message = "O preenchimento do CEP é obrigatório.")
 	private String cep;
 	
+	@NotEmpty(message = "O preenchimento do telefone é obrigatório.")
 	private String telefone1;
 	
 	private String telefone2;
