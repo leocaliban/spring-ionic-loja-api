@@ -2,9 +2,11 @@ package com.leocaliban.loja.api.domain;
 
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.leocaliban.loja.api.domain.enums.StatusPagamento;
 
 @Entity
+@JsonTypeName("pagamentoComCartao")
 public class PagamentoCartao extends Pagamento {
 
 	private static final long serialVersionUID = 1L;
