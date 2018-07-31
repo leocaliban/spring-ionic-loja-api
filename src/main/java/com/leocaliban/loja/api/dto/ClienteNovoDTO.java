@@ -49,6 +49,9 @@ public class ClienteNovoDTO implements Serializable{
 	
 	private Integer cidadeId;
 	
+	@NotEmpty(message = "O preenchimento da senha é obrigatória.")
+	private String senha;
+	
 	public ClienteNovoDTO() {
 		
 	}
@@ -155,6 +158,14 @@ public class ClienteNovoDTO implements Serializable{
 
 	public void setCidadeId(Integer cidadeId) {
 		this.cidadeId = cidadeId;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 	
 }

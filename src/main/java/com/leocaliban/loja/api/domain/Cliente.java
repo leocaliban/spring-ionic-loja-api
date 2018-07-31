@@ -38,6 +38,9 @@ public class Cliente implements Serializable{
 	//Representação interna feita com Integer ao invés do enum
 	private Integer tipoCliente;
 	
+	@JsonIgnore
+	private String senha;
+	
 	@OneToMany(mappedBy = "cliente", cascade = CascadeType.ALL)
 	private List<Endereco>enderecos = new ArrayList<>();
 	
@@ -57,7 +60,7 @@ public class Cliente implements Serializable{
 		
 	}
 
-	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipoCliente) {
+	public Cliente(Integer id, String nome, String email, String cpfOuCnpj, TipoCliente tipoCliente, String senha) {
 		super();
 		this.id = id;
 		this.nome = nome;
@@ -65,6 +68,7 @@ public class Cliente implements Serializable{
 		this.cpfOuCnpj = cpfOuCnpj;
 		//condicional para evitar nullpointer no PUT
 		this.tipoCliente = (tipoCliente == null) ? null : tipoCliente.getCodigo();
+		this.senha = senha;
 	}
 
 	public Integer getId() {
@@ -106,6 +110,14 @@ public class Cliente implements Serializable{
 
 	public void setTipoCliente(TipoCliente tipoCliente) {
 		this.tipoCliente = tipoCliente.getCodigo();
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	public List<Endereco> getEnderecos() {
