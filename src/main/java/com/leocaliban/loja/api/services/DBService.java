@@ -19,6 +19,7 @@ import com.leocaliban.loja.api.domain.PagamentoBoleto;
 import com.leocaliban.loja.api.domain.PagamentoCartao;
 import com.leocaliban.loja.api.domain.Pedido;
 import com.leocaliban.loja.api.domain.Produto;
+import com.leocaliban.loja.api.domain.enums.PerfilUsuario;
 import com.leocaliban.loja.api.domain.enums.StatusPagamento;
 import com.leocaliban.loja.api.domain.enums.TipoCliente;
 import com.leocaliban.loja.api.repositories.CategoriaRepository;
@@ -100,17 +101,24 @@ public class DBService {
 		estadoRepository.saveAll(Arrays.asList(estado1, estado2, estado3));
 		cidadeRepository.saveAll(Arrays.asList(cidade1, cidade2, cidade3, cidade4, cidade5));
 		
-		Cliente cliente1 = new Cliente(null, "Jack Bauer", "leocaliban@gmail.com", "09565698785", TipoCliente.PESSOA_FISICA, passwordEncoder.encode("123"));
-		
+		Cliente cliente1 = new Cliente(null, "Jack Bauer", "leocaliban@gmail.com", "09565698785", 
+							TipoCliente.PESSOA_FISICA, passwordEncoder.encode("123"));
 		cliente1.getTelefones().addAll(Arrays.asList("99165-7855", "98878-8577"));
+		
+		Cliente cliente2 = new Cliente(null, "Nina Myers", "callmusic0@gmail.com", "00209128038", 
+				TipoCliente.PESSOA_FISICA, passwordEncoder.encode("123"));
+		cliente2.getTelefones().addAll(Arrays.asList("1874-7855"));
+		cliente2.addPerfil(PerfilUsuario.ADMIN);
 		
 		Endereco endereco1 = new Endereco(null, "New Link", "071", "Apartamento", "Centro", "54585400", cliente1, cidade2);
 		Endereco endereco2 = new Endereco(null, "Rua Nova", "200", "Casa", "Centro", "54585400", cliente1, cidade1);
+		Endereco endereco3 = new Endereco(null, "Rua do Morro", "266", "Casa", "Centro", "54585400", cliente2, cidade3);
 		
 		cliente1.getEnderecos().addAll(Arrays.asList(endereco1, endereco2));
+		cliente2.getEnderecos().addAll(Arrays.asList(endereco3));
 		
-		clienteRepository.saveAll(Arrays.asList(cliente1));
-		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2));
+		clienteRepository.saveAll(Arrays.asList(cliente1, cliente2));
+		enderecoRepository.saveAll(Arrays.asList(endereco1, endereco2, endereco3));
 		
 		SimpleDateFormat formataData = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 		
