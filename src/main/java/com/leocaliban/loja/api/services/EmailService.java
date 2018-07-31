@@ -1,5 +1,7 @@
 package com.leocaliban.loja.api.services;
 
+import javax.mail.internet.MimeMessage;
+
 import org.springframework.mail.SimpleMailMessage;
 
 import com.leocaliban.loja.api.domain.Pedido;
@@ -23,4 +25,10 @@ public interface EmailService {
 	 * @param mensagem mensagem
 	 */
 	public void enviarEmail(SimpleMailMessage mensagem);
+	
+	public void enviarConfirmacaoDoPedidoHtml(Pedido objeto);
+	
+	public void enviarEmailHtml(MimeMessage mensagem);
+	
+	
 }

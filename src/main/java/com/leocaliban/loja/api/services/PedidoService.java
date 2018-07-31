@@ -68,7 +68,7 @@ public class PedidoService {
 			ip.setPedido(objeto);
 		}
 		itemPedidoRepository.saveAll(objeto.getItens());
-		emailService.enviarConfirmacaoDoPedido(objeto);
+		emailService.enviarConfirmacaoDoPedidoHtml(objeto);
 		return objeto;
 	}
 }
