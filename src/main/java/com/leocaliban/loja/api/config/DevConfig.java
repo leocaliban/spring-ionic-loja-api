@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.leocaliban.loja.api.services.DBService;
+import com.leocaliban.loja.api.services.EmailService;
+import com.leocaliban.loja.api.services.SmtpEmailService;
 
 @Configuration
 @Profile("dev")
@@ -32,5 +34,10 @@ public class DevConfig {
 		
 		dbService.inicializarBancoDeDadosParaTeste();
 		return true;
+	}
+	
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
 	}
 }
