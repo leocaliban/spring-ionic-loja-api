@@ -4,6 +4,7 @@ import javax.mail.internet.MimeMessage;
 
 import org.springframework.mail.SimpleMailMessage;
 
+import com.leocaliban.loja.api.domain.Cliente;
 import com.leocaliban.loja.api.domain.Pedido;
 
 /**
@@ -29,6 +30,8 @@ public interface EmailService {
 	public void enviarConfirmacaoDoPedidoHtml(Pedido objeto);
 	
 	public void enviarEmailHtml(MimeMessage mensagem);
+
+	public void enviarNovaSenhaEmail(Cliente cliente, String novaSenha);
 	
 	
 }
