@@ -15,11 +15,14 @@ import org.springframework.transaction.annotation.Transactional;
 import com.leocaliban.loja.api.domain.Cidade;
 import com.leocaliban.loja.api.domain.Cliente;
 import com.leocaliban.loja.api.domain.Endereco;
+import com.leocaliban.loja.api.domain.enums.PerfilUsuario;
 import com.leocaliban.loja.api.domain.enums.TipoCliente;
 import com.leocaliban.loja.api.dto.ClienteDTO;
 import com.leocaliban.loja.api.dto.ClienteNovoDTO;
 import com.leocaliban.loja.api.repositories.ClienteRepository;
 import com.leocaliban.loja.api.repositories.EnderecoRepository;
+import com.leocaliban.loja.api.security.UserSpringSecurity;
+import com.leocaliban.loja.api.services.exceptions.AutorizacaoException;
 import com.leocaliban.loja.api.services.exceptions.IntegridadeDeDadosException;
 import com.leocaliban.loja.api.services.exceptions.ObjetoNaoEncontratoException;
 
@@ -36,6 +39,11 @@ public class ClienteService {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	public Cliente buscarPorId(Integer id) {
+		UserSpringSecurity usuario = UserService.usuarioAutenticado();
+		if(usuario == null || !usuario.hasRole(PerfilUsuario.ADMIN) && !id.equals(usuario.getId())) {
+			throw new AutorizacaoException("Acesso negado.");
+		}
+		
 		//OPTIONAL - Container que encapsula o objeto buscado, evitando excessao nullpointer [JAVA 8]
 		Optional<Cliente> objeto = repository.findById(id);
 		//Se não achar o objeto retorna null.

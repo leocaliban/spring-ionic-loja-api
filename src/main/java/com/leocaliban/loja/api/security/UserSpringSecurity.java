@@ -75,4 +75,13 @@ public class UserSpringSecurity implements UserDetails{
 		return true;
 	}
 
+	/**
+	 * Verifica se o perfil de usuário é igual ao perfil passado como parametro
+	 * @param perfil
+	 * @return boolean
+	 */
+	public boolean hasRole(PerfilUsuario perfil) {
+		return getAuthorities().contains(new SimpleGrantedAuthority(perfil.getDescricao()));
+	}
+
 }

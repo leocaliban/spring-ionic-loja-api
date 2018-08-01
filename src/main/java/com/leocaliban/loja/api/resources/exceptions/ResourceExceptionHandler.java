@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.leocaliban.loja.api.services.exceptions.AutorizacaoException;
 import com.leocaliban.loja.api.services.exceptions.IntegridadeDeDadosException;
 import com.leocaliban.loja.api.services.exceptions.ObjetoNaoEncontratoException;
 
@@ -48,6 +49,13 @@ public class ResourceExceptionHandler {
 		}
 		
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+	}
+	
+	@ExceptionHandler(AutorizacaoException.class)
+	public ResponseEntity<ErroPadrao> autorizacaoNegada(AutorizacaoException exception, HttpServletRequest request){
+		
+		ErroPadrao erro = new ErroPadrao(HttpStatus.FORBIDDEN.value(), exception.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(erro);
 	}
 
 }
