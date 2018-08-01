@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -62,6 +63,7 @@ public class CategoriaResource {
 		return ResponseEntity.ok().body(listaDTO);
 	}
 
+	@PreAuthorize("hasAnyRole('ADMIN')")//define quem tem autorização nessa requisição
 	@RequestMapping(method = RequestMethod.POST)
 	public ResponseEntity<Void> salvar(@Valid @RequestBody CategoriaDTO objetoDTO){
 		Categoria objeto = service.converterDTO(objetoDTO);
@@ -70,6 +72,7 @@ public class CategoriaResource {
 		return ResponseEntity.created(uri).build();
 	}
 	
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/{id}", method = RequestMethod.PUT)
 	public ResponseEntity<Void> editar(@Valid @RequestBody CategoriaDTO objetoDTO, @PathVariable Integer id){
 		Categoria objeto = service.converterDTO(objetoDTO);

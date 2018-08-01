@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -30,6 +31,7 @@ import com.leocaliban.loja.api.security.JWTUtil;
  */
 @Configuration
 @EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)//Permite anotações de pré-autorizações nos endpoints.
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 	
 	@Autowired
@@ -51,6 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/categorias/**"
 	};
 	
+	private static final String[]PUBLIC_MATCHERS_POST = {
+			"/clientes/**"
+	};
+	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		// se for em ambiene de testes o acesso ao h2 será liberado
@@ -62,6 +68,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		.csrf().disable();//desabilita proteção a CSRF em sistemas stateless
 		http.authorizeRequests()
 			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll()
+			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()
 			.antMatchers(PUBLIC_MATCHERS).permitAll()
 			.anyRequest().authenticated();
 		//Adiciona o filtro
