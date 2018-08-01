@@ -4,9 +4,13 @@ import java.util.Date;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.leocaliban.loja.api.domain.Cliente;
 import com.leocaliban.loja.api.domain.ItemPedido;
 import com.leocaliban.loja.api.domain.PagamentoBoleto;
 import com.leocaliban.loja.api.domain.Pedido;
@@ -14,6 +18,8 @@ import com.leocaliban.loja.api.domain.enums.StatusPagamento;
 import com.leocaliban.loja.api.repositories.ItemPedidoRepository;
 import com.leocaliban.loja.api.repositories.PagamentoRepository;
 import com.leocaliban.loja.api.repositories.PedidoRepository;
+import com.leocaliban.loja.api.security.UserSpringSecurity;
+import com.leocaliban.loja.api.services.exceptions.AutorizacaoException;
 import com.leocaliban.loja.api.services.exceptions.ObjetoNaoEncontratoException;
 
 @Service
@@ -45,6 +51,17 @@ public class PedidoService {
 		Optional<Pedido> objeto = repository.findById(id);
 		return objeto.orElseThrow(() -> new ObjetoNaoEncontratoException(
 				"Objeto não encontrado! Id: " + id + ", Tipo: " + Pedido.class.getName()));
+	}
+	
+	public Page<Pedido> buscarComPaginacao(Integer page, Integer linesPerPage, String orderBy, String direction){
+		UserSpringSecurity usuarioLogado = UserService.usuarioAutenticado();
+		if(usuarioLogado == null) {
+			throw new AutorizacaoException("Acesso negado.");
+		}
+		
+		PageRequest pageRequest = PageRequest.of(page, linesPerPage, Direction.valueOf(direction), orderBy);
+		Cliente cliente = clienteService.buscarPorId(usuarioLogado.getId());
+		return repository.findByCliente(cliente, pageRequest);
 	}
 	
 	@Transactional
