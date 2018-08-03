@@ -71,6 +71,22 @@ public class ClienteService {
 		return repository.findAll();
 	}
 	
+	
+	public Cliente buscarPorEmail(String email) {
+		UserSpringSecurity usuario = UserService.usuarioAutenticado();
+		if(usuario == null || !usuario.hasRole(PerfilUsuario.ADMIN) && !email.equals(usuario.getUsername())) {
+			throw new AutorizacaoException("Acesso negado.");
+		}
+		
+		Cliente objeto = repository.findByEmail(email);
+		
+		if (objeto == null) {
+			throw new ObjetoNaoEncontratoException(
+					"Objeto não encontrado! Id: " + usuario.getId() + ", Tipo: " + Cliente.class.getName());
+		}
+		return objeto;
+	}
+	
 	/**
 	 * Busca os clientes com paginação
 	 * @param page Integer que representa a página (0-1-2...)

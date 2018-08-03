@@ -46,6 +46,12 @@ public class ClienteResource {
 		return ResponseEntity.ok().body(listaDTO);
 	}
 	
+	@RequestMapping(value = "/email", method = RequestMethod.GET)
+	public ResponseEntity<Cliente> buscarPorEmail(@RequestParam(value = "value") String email) {
+		Cliente objeto = service.buscarPorEmail(email);
+		return ResponseEntity.ok().body(objeto);
+	}
+	
 	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value = "/page", method = RequestMethod.GET)
 	public ResponseEntity<Page<ClienteDTO>> buscarComPaginacao(
