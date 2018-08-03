@@ -9,6 +9,10 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import com.amazonaws.AmazonClientException;
+import com.amazonaws.AmazonServiceException;
+import com.amazonaws.services.s3.model.AmazonS3Exception;
+import com.leocaliban.loja.api.services.exceptions.ArquivoException;
 import com.leocaliban.loja.api.services.exceptions.AutorizacaoException;
 import com.leocaliban.loja.api.services.exceptions.IntegridadeDeDadosException;
 import com.leocaliban.loja.api.services.exceptions.ObjetoNaoEncontratoException;
@@ -57,5 +61,36 @@ public class ResourceExceptionHandler {
 		ErroPadrao erro = new ErroPadrao(HttpStatus.FORBIDDEN.value(), exception.getMessage(), System.currentTimeMillis());
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(erro);
 	}
+	
+	@ExceptionHandler(ArquivoException.class)
+	public ResponseEntity<ErroPadrao> arquivo(ArquivoException exception, HttpServletRequest request){
+		
+		ErroPadrao erro = new ErroPadrao(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+	}
+	
+	@ExceptionHandler(AmazonServiceException.class)
+	public ResponseEntity<ErroPadrao> amazonService(AmazonServiceException exception, HttpServletRequest request){
+		
+		HttpStatus codigo = HttpStatus.valueOf(exception.getErrorCode());
+		ErroPadrao erro = new ErroPadrao(codigo.value(), exception.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(codigo).body(erro);
+	}
+	
+	@ExceptionHandler(AmazonClientException.class)
+	public ResponseEntity<ErroPadrao> amazonClient(AmazonClientException exception, HttpServletRequest request){
+		
+		ErroPadrao erro = new ErroPadrao(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+	}
+	
+	@ExceptionHandler(AmazonS3Exception.class)
+	public ResponseEntity<ErroPadrao> amazonS3(AmazonS3Exception exception, HttpServletRequest request){
+		
+		ErroPadrao erro = new ErroPadrao(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), System.currentTimeMillis());
+		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+	}
+	
+
 
 }

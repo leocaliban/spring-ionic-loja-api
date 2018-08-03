@@ -12,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.ObjectMetadata;
+import com.leocaliban.loja.api.services.exceptions.ArquivoException;
 
 @Service
 public class S3Service {
@@ -36,7 +37,7 @@ public class S3Service {
 			return enviarArquivo(inputStream, nomeDoArquivo, tipoDoArquivo);
 		} 
 		catch (IOException e) {
-			throw new RuntimeException("Erro de IO: " + e.getMessage());
+			throw new ArquivoException("Erro de IO: " + e.getMessage());
 		}
 	
 	}
@@ -50,7 +51,7 @@ public class S3Service {
 		}
 
 		catch (URISyntaxException e) {
-			throw new RuntimeException("Erro ao converter URL para URI");
+			throw new ArquivoException("Erro ao converter URL para URI");
 		}
 	}
 
