@@ -1,10 +1,12 @@
 package com.leocaliban.loja.api.services;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +32,9 @@ import com.leocaliban.loja.api.services.exceptions.ObjetoNaoEncontratoException;
 
 @Service
 public class ClienteService {
+	
+	@Value("${img.prefix.client.profile}")
+	private String prefix;
 
 	@Autowired
 	private ClienteRepository repository;
@@ -42,6 +47,9 @@ public class ClienteService {
 	
 	@Autowired
 	private S3Service s3Service;
+	
+	@Autowired
+	private ImagemService imagemService;
 	
 	public Cliente buscarPorId(Integer id) {
 		UserSpringSecurity usuario = UserService.usuarioAutenticado();
@@ -138,11 +146,11 @@ public class ClienteService {
 		if(usuario == null) {
 			throw new AutorizacaoException("Acesso negado.");
 		}
-		URI uri = s3Service.enviarArquivo(multipartFile);
-		Cliente cliente = buscarPorId(usuario.getId());
-		cliente.setUrlDaImagem(uri.toString());
-		repository.save(cliente);
-		return uri;
+		
+		BufferedImage jpgImage = imagemService.getJpgImageFromFile(multipartFile);
+		String nomeDoArquivo = prefix + usuario.getId() + ".jpg";
+
+		return s3Service.enviarArquivo(imagemService.getInputStream(jpgImage, "jpg"), nomeDoArquivo, "image");
 
 	}
 }
