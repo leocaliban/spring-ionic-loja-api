@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.leocaliban.loja.api.domain.Cliente;
@@ -83,5 +84,12 @@ public class ClienteResource {
 	public ResponseEntity<Void> deletar(@PathVariable Integer id){
 		service.deletar(id);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(value = "/{foto}", method = RequestMethod.POST)
+	public ResponseEntity<Void> enviarFotoDePerfil(@RequestParam(name="file") MultipartFile file){
+		URI uri = service.enviarFotoDePerfil(file);
+		return ResponseEntity.created(uri).build();
+
 	}
 }

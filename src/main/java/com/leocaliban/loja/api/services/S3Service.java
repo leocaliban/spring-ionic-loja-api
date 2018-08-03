@@ -1,41 +1,56 @@
 package com.leocaliban.loja.api.services;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URI;
+import java.net.URISyntaxException;
 
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-import com.amazonaws.AmazonClientException;
-import com.amazonaws.AmazonServiceException;
 import com.amazonaws.services.s3.AmazonS3;
-import com.amazonaws.services.s3.model.PutObjectRequest;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 
 @Service
 public class S3Service {
-	
-	private Logger LOG = LoggerFactory.getLogger(S3Service.class);
-	
+
 	@Autowired
 	private AmazonS3 s3Client;
 	
 	@Value("${s3.bucket}")
 	private String bucketName;
 	
-	public void enviarArquivo(String localFilePath) {
+	/**
+	 * Envia arquivos
+	 * @param multipartFile Arquivo 
+	 * @return URI do arquivo na nuvem.
+	 */
+	public URI enviarArquivo(MultipartFile multipartFile) {
 		try {
-			File arquivo = new File(localFilePath);
-			s3Client.putObject(new PutObjectRequest(bucketName, "teste.png", arquivo));
+			String nomeDoArquivo = multipartFile.getOriginalFilename();
+			InputStream inputStream;
+			inputStream = multipartFile.getInputStream();
+			String tipoDoArquivo = multipartFile.getContentType();
+			return enviarArquivo(inputStream, nomeDoArquivo, tipoDoArquivo);
+		} 
+		catch (IOException e) {
+			throw new RuntimeException("Erro de IO: " + e.getMessage());
 		}
-		catch (AmazonServiceException e) {
-			LOG.info("AmazonServiceException: " + e.getErrorMessage());
-			LOG.info("Status code: " + e.getErrorCode());
+	
+	}
+	
+	public URI enviarArquivo(InputStream inputStream , String nomeDoArquivo, String tipoDoArquivo) {
+		try {
+			ObjectMetadata meta = new ObjectMetadata();
+			meta.setContentType(tipoDoArquivo);
+			s3Client.putObject(bucketName, nomeDoArquivo, inputStream, meta);
+			return s3Client.getUrl(bucketName, nomeDoArquivo).toURI();
 		}
-		catch (AmazonClientException e) {
-			LOG.info("AmazonClientException: " + e.getMessage());
+
+		catch (URISyntaxException e) {
+			throw new RuntimeException("Erro ao converter URL para URI");
 		}
 	}
 
