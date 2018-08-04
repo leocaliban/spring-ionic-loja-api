@@ -11,5 +11,5 @@ public interface ClienteRepository extends JpaRepository<Cliente, Integer> {
 
 	//Indica que a busca não está envolvida com uma transação com o banco
 	@Transactional(readOnly = true)
-	Cliente findByEmail(String email);
+	public Cliente findByEmail(String email);
 }

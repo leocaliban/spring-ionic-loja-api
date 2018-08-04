@@ -21,7 +21,7 @@ public interface ProdutoRepository extends JpaRepository<Produto, Integer> {
 	//padrao de busca por nome do método substitui a query acima.
 	//5.3.2. Query Creation
 	//https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.query-methods.details
-	Page<Produto> findDistinctByNomeContainingAndCategoriasIn(@Param("nome") String nome, 
+	public Page<Produto> findDistinctByNomeContainingAndCategoriasIn(@Param("nome") String nome, 
 			@Param("categorias") List<Categoria> categorias, Pageable pageRequest);
 
 }
