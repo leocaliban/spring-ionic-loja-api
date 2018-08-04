@@ -18,7 +18,7 @@ import com.leocaliban.loja.api.services.exceptions.IntegridadeDeDadosException;
 import com.leocaliban.loja.api.services.exceptions.ObjetoNaoEncontratoException;
 
 /**
- * Classe auxiliar que intercepta e controla excessões
+ * Classe auxiliar que intercepta e controla exceções.
  * @author Leocaliban
  *
  * 27 de jul de 2018
