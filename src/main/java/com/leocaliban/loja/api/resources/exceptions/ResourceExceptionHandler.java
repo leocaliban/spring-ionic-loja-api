@@ -29,21 +29,24 @@ public class ResourceExceptionHandler {
 	@ExceptionHandler(ObjetoNaoEncontratoException.class)
 	public ResponseEntity<ErroPadrao> objetoNaoEncontrado(ObjetoNaoEncontratoException exception, HttpServletRequest request){
 		
-		ErroPadrao erro = new ErroPadrao(HttpStatus.NOT_FOUND.value(), exception.getMessage(), System.currentTimeMillis());
+		ErroPadrao erro = new ErroPadrao(System.currentTimeMillis(), HttpStatus.NOT_FOUND.value(), 
+							"Recurso não encontrado.", exception.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.NOT_FOUND).body(erro);
 	}
 	
 	@ExceptionHandler(IntegridadeDeDadosException.class)
 	public ResponseEntity<ErroPadrao> integridadeDeDadosViolada(IntegridadeDeDadosException exception, HttpServletRequest request){
 		
-		ErroPadrao erro = new ErroPadrao(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), System.currentTimeMillis());
+		ErroPadrao erro = new ErroPadrao(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), 
+							"Integridade de dados violada.", exception.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
 	}
 	
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<ErroPadrao> validador(MethodArgumentNotValidException exception, HttpServletRequest request){
 		
-		ErroDoValidador erro = new ErroDoValidador(HttpStatus.BAD_REQUEST.value(), "Erro de validação.", System.currentTimeMillis());
+		ErroDoValidador erro = new ErroDoValidador(System.currentTimeMillis(), HttpStatus.UNPROCESSABLE_ENTITY.value(), 
+								"Erro de validação.", exception.getMessage(), request.getRequestURI());
 		
 		/**
 		 * Adicionando os erros encontrados na lista do erro do validador
@@ -52,20 +55,22 @@ public class ResourceExceptionHandler {
 			erro.adicionarErro(x.getField(), x.getDefaultMessage());
 		}
 		
-		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
+		return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(erro);
 	}
 	
 	@ExceptionHandler(AutorizacaoException.class)
 	public ResponseEntity<ErroPadrao> autorizacaoNegada(AutorizacaoException exception, HttpServletRequest request){
 		
-		ErroPadrao erro = new ErroPadrao(HttpStatus.FORBIDDEN.value(), exception.getMessage(), System.currentTimeMillis());
+		ErroPadrao erro = new ErroPadrao(System.currentTimeMillis(), HttpStatus.FORBIDDEN.value(), 
+							"Acesso negado.", exception.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body(erro);
 	}
 	
 	@ExceptionHandler(ArquivoException.class)
 	public ResponseEntity<ErroPadrao> arquivo(ArquivoException exception, HttpServletRequest request){
 		
-		ErroPadrao erro = new ErroPadrao(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), System.currentTimeMillis());
+		ErroPadrao erro = new ErroPadrao(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), 
+							"Erro de arquivo.", exception.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
 	}
 	
@@ -73,24 +78,25 @@ public class ResourceExceptionHandler {
 	public ResponseEntity<ErroPadrao> amazonService(AmazonServiceException exception, HttpServletRequest request){
 		
 		HttpStatus codigo = HttpStatus.valueOf(exception.getErrorCode());
-		ErroPadrao erro = new ErroPadrao(codigo.value(), exception.getMessage(), System.currentTimeMillis());
+		ErroPadrao erro = new ErroPadrao(System.currentTimeMillis(), codigo.value(), 
+							"Erro Amazon Service.", exception.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(codigo).body(erro);
 	}
 	
 	@ExceptionHandler(AmazonClientException.class)
 	public ResponseEntity<ErroPadrao> amazonClient(AmazonClientException exception, HttpServletRequest request){
 		
-		ErroPadrao erro = new ErroPadrao(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), System.currentTimeMillis());
+		ErroPadrao erro = new ErroPadrao(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), 
+							"Erro Amazon Client.", exception.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
 	}
 	
 	@ExceptionHandler(AmazonS3Exception.class)
 	public ResponseEntity<ErroPadrao> amazonS3(AmazonS3Exception exception, HttpServletRequest request){
 		
-		ErroPadrao erro = new ErroPadrao(HttpStatus.BAD_REQUEST.value(), exception.getMessage(), System.currentTimeMillis());
+		ErroPadrao erro = new ErroPadrao(System.currentTimeMillis(), HttpStatus.BAD_REQUEST.value(), 
+							"Erro Amazon S3.", exception.getMessage(), request.getRequestURI());
 		return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(erro);
 	}
 	
-
-
 }

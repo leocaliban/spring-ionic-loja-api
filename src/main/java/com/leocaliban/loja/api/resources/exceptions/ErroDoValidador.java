@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ErroDoValidador extends ErroPadrao {
-
+	
 	private static final long serialVersionUID = 1L;
 	
 	private List<MensagemDoCampo> erros = new ArrayList<>();
 
-	public ErroDoValidador(Integer status, String mensagem, Long timeStamp) {
-		super(status, mensagem, timeStamp);
-		
+	public ErroDoValidador(Long timeStamp, Integer status, String error, String message, String path) {
+		super(timeStamp, status, error, message, path);
+
 	}
 
 	public List<MensagemDoCampo> getErros() {
