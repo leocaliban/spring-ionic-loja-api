@@ -28,7 +28,7 @@ public class HeaderExposureFilter implements Filter{
 	}
 
 	@Override
-	//Intercepta todas as requisições, expôe o header location e retoma o ciclo da requisição
+	//Intercepta todas as requisições, expõe o header location e retoma o ciclo da requisição
 	public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
 			throws IOException, ServletException {
 		HttpServletResponse r = (HttpServletResponse) response;
