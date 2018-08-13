@@ -28,7 +28,9 @@ public class ClienteInsertValidator implements ConstraintValidator<ClienteInsert
 		List<MensagemDoCampo> lista = new ArrayList<>();
 		
 		// inclua os testes aqui, inserindo erros na lista
+		System.out.println(objetoDTO);
 		if(objetoDTO.getTipoCliente().equals(TipoCliente.PESSOA_FISICA.getCodigo()) && !CPF_CNPJ.isValidCPF(objetoDTO.getCpfOuCnpj())) {
+			System.out.println("entrou");
 			lista.add(new MensagemDoCampo("cpfOuCnpj", "CPF inválido."));
 		}
 		
